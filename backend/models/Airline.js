@@ -6,6 +6,8 @@ const airlineSchema = new Schema({
     logo: { type: String, required: true, unique: true },
     pageweb: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
+    maxWeight: { type: Number, required: true },
+    weightCharge: { type: Number, required: true }
 },
 {
     timestamps: true
