@@ -1,30 +1,20 @@
 import { useEffect, useReducer } from 'react';
-import dayjs from 'dayjs';
 
 import { FlightContext, flightReducer } from './';
-import { fetchWithoutToken, formatDate } from '../../helpers';
-
-const currentDay = dayjs(new Date());
-const weekAddedDay = currentDay.add(1, 'w');
+import { fetchWithoutToken } from '../../helpers';
+import { types } from '../../types';
 
 const FLIGHT_INITIAL_STATE = {
     isLoadedCities: false,
     isLoadedFlights: false,
     flights: [],
     cities: [],
-    origin: '',
-    destiny: '',
-    travelDay: formatDate( currentDay ),
-    returnDay: formatDate( weekAddedDay ),
-    duration: 12,
-    budget: 2000,
 };
 
 export const FlightProvider = ({ children }) => {
 
     const [ state, dispatch ] = useReducer( flightReducer , FLIGHT_INITIAL_STATE );
     
-
     useEffect(() => {
         
         async function fetchData () {
@@ -33,8 +23,6 @@ export const FlightProvider = ({ children }) => {
             const { cities } = await response.json();
             
             updateCities( cities );
-
-            updateOrigin(cities[0]._id);
         }
 
         fetchData();
@@ -57,7 +45,7 @@ export const FlightProvider = ({ children }) => {
     const updateCities = ( cities ) => {
 
         dispatch({
-            type: '[Flights] - Load Cities',
+            type: types.citiesLoad,
             payload: cities
         });
     };
@@ -65,67 +53,26 @@ export const FlightProvider = ({ children }) => {
     const updateFlights = ( flights ) => {
 
         dispatch({
-            type: '[Flights] - Load Flights',
+            type: types.flightsLoad,
             payload: flights
         });
     };
 
-    const handleSwap = ({ origin, destiny }) => {
-        updateOrigin( destiny );
-        updateDestiny( origin );
-    };
+    const findFlights = async ( filterObj ) => {
 
-    const updateOrigin = ( origin ) => {
-        dispatch({
-            type: '[Flights] - Update Origin',
-            payload: origin
-        });
-    };
+        const { origin, destiny, budget, duration, scale, travelDay, returnDay, flightType, flightClass } = filterObj;
 
-    const updateDestiny = ( destiny ) => {
-        dispatch({
-            type: '[Flights] - Update Destiny',
-            payload: destiny
-        });
-    };
-
-    const updateTravelDay = ( date ) => {
-        dispatch({
-            type: '[Flights] - Update Travel Day',
-            payload: date
-        });
-    };
-
-    const updateReturnDay = ( date ) => {
-        dispatch({
-            type: '[Flights] - Update Return Day',
-            payload: date
-        });
-    };
-
-    const updateDuration = ( hours ) => {
-        dispatch({
-            type: '[Flights] - Update Duration',
-            payload: hours
-        });
-    };
-
-    const updateBudget = ( budget ) => {
-        dispatch({
-            type: '[Flights] - Update Budget',
-            payload: budget
-        });
-    };
-
-    const findFlights = async () => {
         try {
             const data = {
-                origin: state.origin,
-                destiny: state.destiny,
-                budget: state.budget,
-                duration: state.duration,
-                scales: 0,
-                //travelDay: state.travelDay
+                origin,
+                destiny,
+                budget,
+                duration,
+                scale,
+                travelDay,
+                returnDay,
+                flightType,
+                flightClass
             };
 
             const response = await fetchWithoutToken('flights/find', data, 'POST');
@@ -143,13 +90,6 @@ export const FlightProvider = ({ children }) => {
             ...state,
 
             //methods
-            handleSwap,
-            updateOrigin,
-            updateDestiny,
-            updateTravelDay,
-            updateReturnDay,
-            updateDuration,
-            updateBudget,
             findFlights,
         }}>
             { children }

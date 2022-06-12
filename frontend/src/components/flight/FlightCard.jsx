@@ -16,7 +16,6 @@ export const FlightCard = ({ city }) => {
     const userSearch = new URLSearchParams(search).get('search');    
 
     const currentFlights = useMemo( () => flights.filter( flight => flight.destiny.name === city ), [ flights, city ] );
-    console.log(currentFlights);
 
     return (
         <>

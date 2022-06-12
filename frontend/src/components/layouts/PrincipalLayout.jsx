@@ -26,7 +26,7 @@ export const PrincipalLayout = ({ children }) => {
                                 <CircularProgress size={40} />
                             </Grid>
                         )
-                }                
+                }
 
                 { children }
             </main>

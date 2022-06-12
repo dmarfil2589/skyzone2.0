@@ -1,73 +1,90 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { useNavigate } from 'react-router-dom';
-import { Button, Grid, InputAdornment, MenuItem, TextField } from "@mui/material";
+
+import { Box, Button, capitalize, Chip, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import FlightIcon from '@mui/icons-material/Flight';
+
 import dayjs from "dayjs";
 
-import { FlightContext } from "../../context";
+import { FilterContext, FlightContext } from "../../context";
+import { ButtonFlightType, ButtonCounterTravelers, ButtonFlightClass } from "./";
+import { MenuItemsFlights } from "./MenuItemsFlights";
 import { formatDate } from '../../helpers';
+
 
 const currentDay = dayjs(new Date());
 
 export const FlightsFilter = () => {
+
+    const { cities } = useContext( FlightContext );
 
     const { 
         origin,
         destiny,
         travelDay,
         returnDay,
-        cities,
+        typeFlight,
         handleSwap,
         updateOrigin,
         updateDestiny,
+        removeDestiny,
         updateTravelDay,
         updateReturnDay,
-        findFlights } = useContext( FlightContext );
+        searchFilter } = useContext( FilterContext );
 
     const navigation = useNavigate();
-
+    
+    const DataOrigin = useMemo( () => cities.find( city => city._id === origin ), [origin, cities] );
+    const DataDestinies = useMemo( () => cities.filter( city => destiny.includes( city._id ) ), [destiny, cities] );
+    
     const searchFlights = () => {
-        const searchOrigin = cities.find( city => city._id === origin );
-        const searchDestiny = cities.find( city => city._id === destiny );
-        findFlights();
-        navigation(`/flights?search=${ searchOrigin.code }-${ searchDestiny.code }`);
-    }    
-
+        searchFilter();
+        navigation(`/flights`);
+    };
+    
     return (
         <Grid container spacing={1}>
+            <Grid container item spacing={1} xs={12}>
+                {/* Button change Flight type */}
+                <ButtonFlightType />
+
+                {/* Button change number of travelers */}
+                <ButtonCounterTravelers />
+
+                {/* Button change flight class */}
+                <ButtonFlightClass />
+            </Grid>
+
             {/* Origen */}
             <Grid item xs={12} sm={6} md={3}>
-                <TextField
-                    label='Origen'
-                    select
-                    InputProps={{ 
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <FlightIcon />
-                            </InputAdornment>
-                        )
-                    }}
-                    value={ origin }
-                    defaultValue={ origin }                    
-                    fullWidth
-                    margin='dense'
-                    onChange={ (e) => updateOrigin(e.target.value) }
-                >
-                    <MenuItem value='' disabled>
-                        Origen
-                    </MenuItem>
-
-                    {
-                        cities.map( city => (
-                            <MenuItem value={ city._id } key={ city._id }>
-                                { city.name }
-                            </MenuItem>
-                        ))
-                    }
-
-                </TextField>
+                <FormControl fullWidth margin='dense'>
+                    <InputLabel id='label-origin'>Origen</InputLabel>
+                    <Select
+                        labelId="label-origin"
+                        label='Origen'
+                        startAdornment={ <FlightIcon /> }
+                        value={ origin }
+                        defaultValue={ origin }
+                        renderValue={ () => (
+                            <Box ml={1} sx={{ display: 'flex', gap: 0.5 }}>
+                                <Chip 
+                                    label={`${ capitalize(DataOrigin.name) }, Venezuela`}
+                                />
+                            </Box>
+                        )}
+                        onChange={ (e) => updateOrigin(e.target.value) }
+                    >
+                        {
+                            cities.map( city => (
+                                <MenuItem value={ city._id } key={ city._id }>
+                                    <MenuItemsFlights city={ city } checked={ origin === city._id } />
+                                </MenuItem>
+                            ))
+                        }
+                    </Select>
+                </FormControl>
             </Grid>
 
             <Grid item sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }} md={1}>
@@ -85,35 +102,43 @@ export const FlightsFilter = () => {
 
             {/* destino */}
             <Grid item xs={12} sm={6} md={3}>
-                <TextField
-                    select
-                    label='Destino'
-                    InputProps={{ 
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <FlightIcon />
-                            </InputAdornment>
-                        )
-                    }}
-                    fullWidth
-                    value={ destiny }
-                    defaultValue={ destiny }    
-                    margin='dense'
-                    onChange={ (e) => updateDestiny(e.target.value) }
-                >
-                    <MenuItem value='' disabled>
-                        Destino
-                    </MenuItem>
+                <FormControl fullWidth margin="dense">
+                <InputLabel id='label-destiny'>Destinos</InputLabel>
+                    <Select
+                        labelId="label-destiny"
+                        label='Destinos'
+                        multiple
+                        renderValue={ () => (
+                            <Box sx={{ display: 'flex', overflowX: 'auto', gap: 0.5 }}>
+                                {DataDestinies.map((city) => (
+                                    <Chip 
+                                        key={city._id}
+                                        label={` ${ capitalize(city.name) }, Venezuela `}
+                                        onMouseDown={ e => e.stopPropagation() }
+                                        onDelete={ () => removeDestiny(city._id) }
+                                    />
+                                ))}
+                            </Box>
+                        )}
+                        startAdornment={ <FlightIcon /> }
+                        value={ destiny }
+                        onChange={ (e) => updateDestiny( e.target.value ) }
+                    >
+                        {
+                            cities.map( city => {
+                                if ( city._id !== origin ) {
+                                    return (
+                                        <MenuItem value={ city._id } key={ city._id }>
+                                            <MenuItemsFlights city={ city } checked={ destiny.includes( city._id ) } />
+                                        </MenuItem>
+                                    )
+                                }
 
-                    {
-                        cities.map( city => (
-                            <MenuItem value={ city._id } key={ city._id }>
-                                { city.name }
-                            </MenuItem>
-                        ))
-                    }
-
-                </TextField>
+                                return null;
+                            })
+                        }
+                    </Select>
+                </FormControl>
             </Grid>
 
             {/* Salida */}
@@ -130,7 +155,7 @@ export const FlightsFilter = () => {
             </Grid>
 
             {/* Regreso */}
-            <Grid item xs={12} sm={6} md={2}>
+            <Grid item xs={12} sm={6} md={2} sx={{ display: typeFlight === 'ida' ? 'none' : 'block' }}>
                 <TextField
                     type='date'
                     label='Fecha de Regreso'

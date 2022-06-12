@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Link as RouterLink } from 'react-router-dom';
 
-import { Box, capitalize, Divider, Drawer, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, ListSubheader } from "@mui/material";
+import { Box, capitalize, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, ListSubheader } from "@mui/material";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import AirplaneTicketOutlinedIcon from '@mui/icons-material/AirplaneTicketOutlined';
 import PublicOutlinedIcon from '@mui/icons-material/PublicOutlined';
@@ -28,38 +28,41 @@ export const SideMenu = () => {
                     </ListSubheader>
                     <Divider />
 
-                    <ListItem>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <AccountCircleOutlinedIcon />
-                            </ListItemIcon>
+                    <ListItem
+                        button
+                        onClick={ () => toogleSideMenu() }
+                    >
+                        <ListItemIcon>
+                            <AccountCircleOutlinedIcon />
+                        </ListItemIcon>
 
-                            <ListItemText primary='Ingresar' />
-                        </ListItemButton>
+                        <ListItemText primary='Ingresar' />
                     </ListItem>
 
-                    <ListItem>
-                        <ListItemButton onClick={ () => toogleSideMenu() }>
-                            <Link component={ RouterLink } to="/flights" display='flex'>
-                                <ListItemIcon>
-                                    <AirplaneTicketOutlinedIcon  />
-                                </ListItemIcon>
+                    <ListItem
+                        button
+                        component={ RouterLink }
+                        to="/flights"
+                        onClick={ () => toogleSideMenu() }
+                    >
+                        <ListItemIcon>
+                            <AirplaneTicketOutlinedIcon  />
+                        </ListItemIcon>
 
-                                <ListItemText primary='Vuelos' />
-                            </Link>
-                        </ListItemButton>
+                        <ListItemText primary='Vuelos' />       
                     </ListItem>
 
-                    <ListItem>
-                        <ListItemButton onClick={ () => toogleSideMenu() }>
-                            <Link component={ RouterLink } to="/explore" display='flex'>
-                                <ListItemIcon>
-                                    <PublicOutlinedIcon  />
-                                </ListItemIcon>
+                    <ListItem
+                        button
+                        component={ RouterLink }
+                        to="/explore"
+                        onClick={ () => toogleSideMenu() }
+                    >
+                        <ListItemIcon>
+                            <PublicOutlinedIcon  />
+                        </ListItemIcon>
 
-                                <ListItemText primary='Explorar' />
-                            </Link>
-                        </ListItemButton>
+                        <ListItemText primary='Explorar' />
                     </ListItem>
                 </List>
             </Box>
