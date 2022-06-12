@@ -206,42 +206,105 @@ const airlines = [
         name: 'Avior airlines',
         logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Avior_Airlines_2017.svg/3071px-Avior_Airlines_2017.svg.png',
         pageweb: 'https://www.avior.com.ve/en',
-        email: 'aviorairlines@gmail.com'
+        email: 'aviorairlines@gmail.com',
+        maxWeight: 5,
+        weightCharge: 6.99
     },
     {
         name: 'Qatar airways',
         logo: 'https://upload.wikimedia.org/wikipedia/commons/c/c2/Qatar_Airways_Logo.png',
         pageweb: 'https://www.qatarairways.com/es-es/homepage.html',
-        email: 'qatarairwayz@gmail.com'
+        email: 'qatarairwayz@gmail.com',
+        maxWeight: 6,
+        weightCharge: 8.99
     },
     {
         name: 'Singapore Airlines',
         logo: 'https://i.pinimg.com/originals/8d/66/86/8d6686bc4ffdb16143dd272b6f3b89dd.png',
         pageweb: 'https://www.singaporeair.com/en_UK/sg/home',
-        email: 'singaporeairlines@gmail.com'
+        email: 'singaporeairlines@gmail.com',
+        maxWeight: 4,
+        weightCharge: 3.99
     },
     {
         name: 'All Nippon Airways',
         logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/All_Nippon_Airways_Logo.svg/2560px-All_Nippon_Airways_Logo.svg.png',
         pageweb: 'https://www.ana.co.jp/en/us/',
-        email: 'ana@gmail.com'
+        email: 'ana@gmail.com',
+        maxWeight: 5,
+        weightCharge: 4.99
     },
     {
         name: 'Emirates',
         logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Emirates_logo.svg/1200px-Emirates_logo.svg.png',
         pageweb: 'https://www.emirates.com/english/',
-        email: 'emirates@gmail.com'
+        email: 'emirates@gmail.com',
+        maxWeight: 3,
+        weightCharge: 1.99
     },
     {
         name: 'Japan Airlines',
         logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Japan_Airlines_logo_%282002%E2%80%932011%29.svg/2560px-Japan_Airlines_logo_%282002%E2%80%932011%29.svg.png',
         pageweb: 'https://www.jal.co.jp/jp/en/',
-        email: 'jal@gmail.com'
+        email: 'jal@gmail.com',
+        maxWeight: 4,
+        weightCharge: 3.65
     },
 ];
 
 const classes = [ 'economica', 'ejecutiva', 'primera', 'privado' ];
 const types = [ 'ida', 'ida y vuelta' ];
+
+const business = [
+    {
+        name: 'prueba 1',
+        description: 'descripcion prueba 1',
+        image: 'https://play-lh.googleusercontent.com/aFWiT2lTa9CYBpyPjfgfNHd0r5puwKRGj2rHpdPTNrz2N9LXgN_MbLjePd1OTc0E8Rl1',
+        email: 'prueba1@gmail.com',
+        phone: '+3102982919412',
+        facebook: 'www.facebook.com',
+        instagram: 'www.instagram.com',
+        twitter: 'www.twitter.com',
+        city: '62a2a1ac73d9375816996e2f'
+    },
+
+    /* 
+    city: { type: Schema.Types.ObjectId, required: true, ref: 'City' },
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    image: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    phone: { type: String, required: true },
+    facebook: { type: String },
+    instagram: { type: String },
+    twitter: { type: String }, */
+];
+
+const services = [
+    {
+        name: '',
+        description: '',
+        image: '',
+    },
+
+    /* 
+    bussiness: { type: Schema.Types.ObjectId, required: true, ref: 'Bussiness' },
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    image: { type: String, required: true },
+    type: { 
+        type: String, 
+        required: true,
+        enum: {
+            values: [ 'alimentacion', 'salud', 'entretenimiento', 'transporte' ],
+            message: '[ VALUE ] no es valido',
+        },
+        default: 'entretenimiento',
+    }
+    */
+];
+
+const typeService = [ 'alimentacion', 'salud', 'entretenimiento', 'transporte' ];
 
 module.exports = {
     cities,
@@ -249,4 +312,6 @@ module.exports = {
     airlines,
     classes,
     types,
+    business,
+    typeService
 }
