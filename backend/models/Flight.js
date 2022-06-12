@@ -3,7 +3,7 @@ const { Schema, model } = mongoose;
 
 const flightSchema = new Schema({
     airline: { type: Schema.Types.ObjectId, ref: 'Airline', required: true },
-    number: { type: Number, required: true },
+    number: { type: String, required: true, unique: true },
     type: { 
         type: String, 
         required: true, 
@@ -28,10 +28,13 @@ const flightSchema = new Schema({
     origin: { type: Schema.Types.ObjectId, ref: 'City', required: true },
     destiny: { type: Schema.Types.ObjectId, ref: 'City', required: true },
     exitDate: { type: Date, required: true },
+    returnDate: { type: Date }
 },
 {
     timestamps: true
 });
+
+flightSchema.index({ price: 1 });
 
 const Flight = mongoose.models.Flight || model('Flight', flightSchema);
 module.exports = Flight;
