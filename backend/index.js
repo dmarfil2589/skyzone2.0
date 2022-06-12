@@ -21,6 +21,8 @@ app.use( express.json() );
 //route handler
 app.use('/api/cities', require('./routes/cities'));
 app.use('/api/flights', require('./routes/flights'));
+app.use('/api/business', require('./routes/business'));
+app.use('api/services', require('./routes/services'));
 
 app.use('/api/seed', require('./routes/seed'));
 
