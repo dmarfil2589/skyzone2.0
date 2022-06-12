@@ -1,31 +1,29 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
-import { Grid, Typography, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Divider, Box, Slider, CircularProgress } from '@mui/material';
+import { Grid, Typography, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Divider, Box, Slider, CircularProgress, capitalize } from '@mui/material';
 
 import { PrincipalLayout } from '../layouts';
 import { CityCard } from './CityCard'
 import { formatWithoutDecimals } from '../../helpers';
-import { FlightContext } from '../../context';
-
-const scalesTypes = [
-    {
-        name: 'Todas las escalas',
-        value: 1
-    },
-    {
-        name: 'Hasta 1 escala',
-        value: 2
-    },
-    {
-        name: 'Solo directos',
-        value: 3
-    }
-];
+import { FilterContext, FlightContext } from '../../context';
+import { scales } from '../../contants';
 
 export const ExploreScreen = () => {
 
-    const { isLoadedCities, cities, duration, budget, updateDuration, updateBudget } = useContext( FlightContext );
-    const [ scale, setScale ] = useState(1);
+    const { isLoadedCities, cities } = useContext( FlightContext );
+    const { duration, budget, scale, updateDuration, updateBudget, updateScale, origin } = useContext( FilterContext );
+
+    const [ dataOrigin, setDataOrigin ] = useState(null);
+
+    useEffect(() => {
+
+        if( isLoadedCities ) {
+            const dataOrigin = cities.find( city => city._id === origin )
+            setDataOrigin( dataOrigin );
+        }
+        
+    }, [ isLoadedCities, cities, setDataOrigin, origin ]);
+
 
     return (
         <>  
@@ -41,10 +39,10 @@ export const ExploreScreen = () => {
                                 aria-labelledby="demo-controlled-radio-buttons-group"
                                 name="controlled-radio-buttons-group"
                                 value={ scale }
-                                onChange={ (e) => setScale( e.target.value ) }
+                                onChange={ (e) => updateScale( e.target.value ) }
                             >
                                 {
-                                    scalesTypes.map( type => (
+                                    scales.map( type => (
                                         <FormControlLabel
                                             key={ type.name }
                                             value={ type.value }
@@ -107,7 +105,7 @@ export const ExploreScreen = () => {
                             </Typography>
 
                             <Typography variant='body2'>
-                                desde { 'Caracas!!!!!!' }
+                                desde { dataOrigin ? capitalize(dataOrigin.name) : 'Cualquier parte del mundo' }
                             </Typography>
                         </Grid>
                         {

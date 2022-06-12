@@ -1,6 +1,7 @@
 import { useReducer } from 'react';
 
 import { UIContext, UIReducer } from './';
+import { types } from '../../types';
 
 const UI_INITIAL_STATE = {
     isMenuOpen: false,
@@ -12,7 +13,7 @@ export const UIProvider = ({ children }) => {
 
     const toogleSideMenu = () => {
         dispatch({
-            type: '[UI] - ToggleMenu'
+            type: types.uiToggleMenu
         });
     };
 
