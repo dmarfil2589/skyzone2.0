@@ -1,0 +1,21 @@
+{
+  "name": "travel-app-back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Diego Marfil",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "2.8.5",
+    "dayjs": "1.11.2",
+    "dotenv": "16.0.1",
+    "express": "4.18.1",
+    "express-validator": "6.14.0",
+    "mongoose": "6.3.3"
+  }
+}
