@@ -8,7 +8,7 @@ dayjs.extend(utc)
 const getFlights = async ( req, res = response ) => {
 
     try {
-        const flights = await Flight.find().populate('origin destiny').lean();
+        const flights = await Flight.find().populate('origin destiny').limit(200).lean();
 
         return res.status(200).json({ flights });
 
@@ -18,15 +18,28 @@ const getFlights = async ( req, res = response ) => {
 };
 
 const findFlights = async (req, res = response) => {
-    const { origin = '', destiny = '', travelDay = '', scales = '', duration = '', budget = '' } = req.body;
+    const { 
+        origin = '',
+        destiny = [],
+        travelDay = '',
+        returnDay = '',
+        scales = 0,
+        duration = '',
+        budget = '',
+        flightType = '',
+        flightClass = ''
+    } = req.body;
 
     const filter = {
         timeOfFlight: { $lte: duration * 60 },
         price : { $lte: budget },
         origin,
-        destiny,
-        exitDate: { $gte: dayjs( travelDay ).subtract('4', 'hours').toISOString(), $lte: dayjs( travelDay ).add(1, 'day').subtract('4', 'hours').toISOString() },
-        scales: { $lte: scales }
+        destiny: { $in: destiny },
+        exitDate: { $gte: dayjs( travelDay ).utc(true).toISOString(), $lte: dayjs( travelDay ).utc(true).add(1, 'day').toISOString() },
+        returnDate: { $gte: dayjs( returnDay ).utc(true).toISOString(), $lte: dayjs( returnDay ).utc(true).add(1, 'day').toISOString() },
+        scales: { $lte: scales },
+        type: flightType,
+        class: flightClass
     };
 
     if( budget >= 2000 )
@@ -38,8 +51,14 @@ const findFlights = async (req, res = response) => {
     if( duration >= 12 )
         delete filter.duration;
 
+    if ( flightType === 'ida' )
+        delete filter.returnDate;
+
+    if ( destiny.length === 0 )
+        delete filter.destiny;
+    
     try {
-        const flights = await Flight.find( filter ).populate('origin destiny').sort({ price: 1 }).lean();
+        const flights = await Flight.find( filter ).populate('origin destiny airline').sort({ price: 1 }).lean();
 
         return res.status(200).json({ flights });
 

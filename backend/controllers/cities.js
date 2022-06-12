@@ -5,7 +5,7 @@ const { errorDBMessage } = require('../helpers/errorDbMessage');
 const getCities = async ( req, res = response ) => {
 
     try {
-        const cities = await City.find().lean();        
+        const cities = await City.find().populate('country').lean();
 
         return res.status(200).json({ cities });
 
