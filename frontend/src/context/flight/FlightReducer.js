@@ -18,6 +18,19 @@ export const flightReducer = ( state, action ) => {
                 isLoadedFlights: true,
             };
 
+        case types.flightsSearch:
+            return {
+                ...state,
+                search: [ ...action.payload.flights ],
+                totalPages: action.payload.totalPages
+            };
+
+        case types.flightsSearchMore:
+            return {
+                ...state,
+                search: [ ...state.search, ...action.payload ],
+            };
+
         default:
             return state;
     }

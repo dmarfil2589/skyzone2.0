@@ -23,7 +23,7 @@ const FILTER_INITIAL_STATE = {
     travelers: 1,
 };
 
-export const FiterProvider = ({ children }) => {
+export const FilterProvider = ({ children }) => {
 
     const { cities, findFlights } = useContext( FlightContext );
     const [ state, dispatch ] = useReducer( filterReducer , FILTER_INITIAL_STATE );
@@ -39,7 +39,7 @@ export const FiterProvider = ({ children }) => {
 
         if ( state.destiny.length === 1 ) {
             updateOrigin( state.destiny[0] );
-            updateDestiny( origin );
+            updateDestiny( [ state.origin ] );
         }
     };
 
@@ -51,6 +51,7 @@ export const FiterProvider = ({ children }) => {
     };
 
     const updateDestiny = ( destiny ) => {
+
         dispatch({
             type: types.filterUpdateDestiny,
             payload: destiny

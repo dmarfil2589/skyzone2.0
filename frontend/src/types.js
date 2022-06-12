@@ -20,4 +20,13 @@ export const types = {
     filterUpdateClassFlight: '[Filter] - Update Flight Class',
     filterAddTraveler: '[Filter] - Add Traveler',
     filterSustractTraveler: '[Filter] - Sustract Traveler',
+
+    //business
+    businessLoad: '[Business] - Load Business',
+    businessSearch: '[Business] - Search Business',
+    businessMoreSearch: '[Business] - Get more Business',
+
+    //services
+    servicesSearch: '[Services] - Search services',
+    servicesMoreSearch: '[Services] - Get more services',
 };

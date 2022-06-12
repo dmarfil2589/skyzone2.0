@@ -8,7 +8,7 @@ export const MenuItemsFlights = ({ city, checked }) => {
             <Avatar variant='square' sizes="large" src={ city.image } />
             <ListItemText
                 sx={{ ml: 2 }}
-                primary={ `${ capitalize(city.name) }, Venezuela` }
+                primary={ `${ capitalize(city.name) }, ${ capitalize( city.country.name ) }` }
                 secondary={ capitalize(city.name) }
             />
             <Box flex={1} />

@@ -1,17 +1,22 @@
 import propTypes from 'prop-types';
-import { IconButton, Typography } from '@mui/material';
+import { Box, Grid, IconButton, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const ExpandMore = styled((props) => {
-    const { expand, text, ...other } = props;
+    const { expand, icon, text, ...other } = props;
     return (
-        <>
-            <Typography>
+        <Grid container item alignItems='center' xs={12}>
+            { icon }
+
+            <Typography ml={2}>
                 Vuelos a { text }
             </Typography>
+
+            <Box flex='1' />
+
             <IconButton {...other} />
-        </>
+        </Grid>
     );
 })(({ theme, expand }) => ({
     transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
@@ -21,7 +26,7 @@ const ExpandMore = styled((props) => {
     }),
 }));
 
-export const ExpandCard = ({ text, expanded, handleExpanded }) => {
+export const ExpandCard = ({ text, icon, expanded, handleExpanded }) => {
 
     return (
         <ExpandMore
@@ -30,6 +35,7 @@ export const ExpandCard = ({ text, expanded, handleExpanded }) => {
             aria-expanded={ expanded }
             aria-label="show more"
             text={ text }
+            icon={ icon }
         >
             <ExpandMoreIcon />
         </ExpandMore>
@@ -38,6 +44,7 @@ export const ExpandCard = ({ text, expanded, handleExpanded }) => {
 
 
 ExpandCard.propTypes = {
+    icon: propTypes.element.isRequired,
     text: propTypes.string.isRequired,
     expanded: propTypes.bool.isRequired,
     handleExpanded: propTypes.func.isRequired

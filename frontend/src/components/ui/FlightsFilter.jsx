@@ -1,5 +1,5 @@
 import { useContext, useMemo } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Box, Button, capitalize, Chip, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
@@ -8,13 +8,15 @@ import FlightIcon from '@mui/icons-material/Flight';
 
 import dayjs from "dayjs";
 
-import { FilterContext, FlightContext } from "../../context";
+import { BusinessContext, FilterContext, FlightContext, ServiceContext } from "../../context";
 import { ButtonFlightType, ButtonCounterTravelers, ButtonFlightClass } from "./";
 import { MenuItemsFlights } from "./MenuItemsFlights";
 import { formatDate } from '../../helpers';
 
 
 const currentDay = dayjs(new Date());
+
+const bussinessViews = [ '/business', '/services', '/events' ];
 
 export const FlightsFilter = () => {
 
@@ -29,24 +31,45 @@ export const FlightsFilter = () => {
         handleSwap,
         updateOrigin,
         updateDestiny,
-        removeDestiny,
         updateTravelDay,
         updateReturnDay,
         searchFilter } = useContext( FilterContext );
 
+    const { searchServices } = useContext( ServiceContext );
+    const { searchBusiness } = useContext( BusinessContext );
+
     const navigation = useNavigate();
-    
+    const location = useLocation();
+
     const DataOrigin = useMemo( () => cities.find( city => city._id === origin ), [origin, cities] );
-    const DataDestinies = useMemo( () => cities.filter( city => destiny.includes( city._id ) ), [destiny, cities] );
+    const DataDestinations = useMemo( () => cities.filter( city => destiny.includes( city._id ) ), [destiny, cities] );
+    const isBusinessView = useMemo( () => bussinessViews.includes(location.pathname), [ location.pathname ]);
     
     const searchFlights = () => {
-        searchFilter();
-        navigation(`/flights`);
+
+        switch ( location.pathname ) {
+            case '/flights':
+                searchFilter();
+                break;
+
+            case '/bussiness':
+                searchBusiness({ destiny });
+                break;
+
+            case '/services':
+                searchServices({ destiny });
+                break;
+        
+            default:
+                searchFilter();
+                navigation(`/flights`);
+                break;
+        }        
     };
     
     return (
         <Grid container spacing={1}>
-            <Grid container item spacing={1} xs={12}>
+            <Grid container item spacing={1} xs={12} sx={{ display: isBusinessView ? 'none' : 'flex' }}>
                 {/* Button change Flight type */}
                 <ButtonFlightType />
 
@@ -58,7 +81,7 @@ export const FlightsFilter = () => {
             </Grid>
 
             {/* Origen */}
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid item xs={12} sm={6} md={3} sx={{ display: isBusinessView ? 'none' : 'flex' }}>
                 <FormControl fullWidth margin='dense'>
                     <InputLabel id='label-origin'>Origen</InputLabel>
                     <Select
@@ -70,7 +93,7 @@ export const FlightsFilter = () => {
                         renderValue={ () => (
                             <Box ml={1} sx={{ display: 'flex', gap: 0.5 }}>
                                 <Chip 
-                                    label={`${ capitalize(DataOrigin.name) }, Venezuela`}
+                                    label={`${ capitalize(DataOrigin.name) }, ${ capitalize( DataOrigin.country.name ) }`}
                                 />
                             </Box>
                         )}
@@ -87,7 +110,7 @@ export const FlightsFilter = () => {
                 </FormControl>
             </Grid>
 
-            <Grid item sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }} md={1}>
+            <Grid item sx={{ display: isBusinessView ? 'none' : { xs: 'none', md: 'flex' }, alignItems: 'center' }} md={1}>
                 <Button
                     type='button'
                     size='large'
@@ -95,6 +118,7 @@ export const FlightsFilter = () => {
                     fullWidth
                     sx={{ height: '80%' }}
                     onClick={ () => handleSwap({ origin, destiny }) }
+                    disabled={ destiny.length !== 1 }
                 >
                     <SwapHorizIcon />
                 </Button>
@@ -109,13 +133,11 @@ export const FlightsFilter = () => {
                         label='Destinos'
                         multiple
                         renderValue={ () => (
-                            <Box sx={{ display: 'flex', overflowX: 'auto', gap: 0.5 }}>
-                                {DataDestinies.map((city) => (
+                            <Box sx={{ display: 'flex', gap: 0.5 }}>
+                                {DataDestinations.map((city) => (
                                     <Chip 
                                         key={city._id}
-                                        label={` ${ capitalize(city.name) }, Venezuela `}
-                                        onMouseDown={ e => e.stopPropagation() }
-                                        onDelete={ () => removeDestiny(city._id) }
+                                        label={` ${ capitalize(city.name) }, ${ capitalize( city.country.name ) } `}
                                     />
                                 ))}
                             </Box>
@@ -142,7 +164,7 @@ export const FlightsFilter = () => {
             </Grid>
 
             {/* Salida */}
-            <Grid item xs={12} sm={6} md={2}>
+            <Grid item xs={12} sm={6} md={2} sx={{ display: isBusinessView ? 'none' : 'flex' }}>
                 <TextField
                     type='date'
                     label='Fecha de Salida'
@@ -155,7 +177,7 @@ export const FlightsFilter = () => {
             </Grid>
 
             {/* Regreso */}
-            <Grid item xs={12} sm={6} md={2} sx={{ display: typeFlight === 'ida' ? 'none' : 'block' }}>
+            <Grid item xs={12} sm={6} md={2} sx={{ display: isBusinessView ? 'none' : typeFlight === 'ida' ? 'none' : 'block' }}>
                 <TextField
                     type='date'
                     label='Fecha de Regreso'

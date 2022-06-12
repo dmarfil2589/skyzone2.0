@@ -1,7 +1,7 @@
 import { useContext, useMemo, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import propTypes from 'prop-types';
 import { Card, CardActions, CardContent, Collapse, Grid, List, ListItem, Typography } from '@mui/material';
+import FlightIcon from '@mui/icons-material/Flight';
 
 import { ExpandCard } from '../ui';
 import { FlightContext } from '../../context';
@@ -11,9 +11,6 @@ export const FlightCard = ({ city }) => {
 
     const { flights } = useContext( FlightContext );
     const [ expanded, setExpanded ] = useState(false);
-
-    const { search } = useLocation();
-    const userSearch = new URLSearchParams(search).get('search');    
 
     const currentFlights = useMemo( () => flights.filter( flight => flight.destiny.name === city ), [ flights, city ] );
 
@@ -28,6 +25,7 @@ export const FlightCard = ({ city }) => {
                                     text={ city }
                                     expanded={ expanded }
                                     handleExpanded={ () => setExpanded(!expanded) }
+                                    icon={ <FlightIcon /> }
                                 />
                             </CardActions>
                             <Collapse in={ expanded } timeout="auto" unmountOnExit>
@@ -54,5 +52,5 @@ export const FlightCard = ({ city }) => {
 }
 
 ExpandCard.propTypes = {
-    city: propTypes.string.isRequired,
+    city: propTypes.string,
 };

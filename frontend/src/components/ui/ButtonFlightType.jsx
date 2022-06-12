@@ -21,6 +21,11 @@ export const ButtonFlightType = () => {
         setAnchorEl(null);
     };
 
+    const handleChangeValue = ( value ) => {
+        updateTypeFlight( value );
+        handleClose();
+    };
+
     return (
         <Grid item>
             <Button onClick={ handleClick } color='inherit' endIcon={ <ArrowDownRotate open={open} /> }>
@@ -33,7 +38,7 @@ export const ButtonFlightType = () => {
             >
                 {
                     typesFlights.map( type => (
-                        <MenuItem key={ type.value } onClick={ () => updateTypeFlight( type.value ) } >
+                        <MenuItem key={ type.value } onClick={ () => handleChangeValue( type.value ) } >
                             { capitalize(type.name) }
                         </MenuItem>
                     ))

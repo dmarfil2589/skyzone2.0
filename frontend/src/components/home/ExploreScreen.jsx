@@ -1,6 +1,6 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
-import { Grid, Typography, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Divider, Box, Slider, CircularProgress } from '@mui/material';
+import { Grid, Typography, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Divider, Box, Slider, CircularProgress, capitalize } from '@mui/material';
 
 import { PrincipalLayout } from '../layouts';
 import { CityCard } from './CityCard'
@@ -11,7 +11,19 @@ import { scales } from '../../contants';
 export const ExploreScreen = () => {
 
     const { isLoadedCities, cities } = useContext( FlightContext );
-    const { duration, budget, scale, updateDuration, updateBudget, updateScale } = useContext( FilterContext );
+    const { duration, budget, scale, updateDuration, updateBudget, updateScale, origin } = useContext( FilterContext );
+
+    const [ dataOrigin, setDataOrigin ] = useState(null);
+
+    useEffect(() => {
+
+        if( isLoadedCities ) {
+            const dataOrigin = cities.find( city => city._id === origin )
+            setDataOrigin( dataOrigin );
+        }
+        
+    }, [ isLoadedCities, cities, setDataOrigin, origin ]);
+
 
     return (
         <>  
@@ -93,7 +105,7 @@ export const ExploreScreen = () => {
                             </Typography>
 
                             <Typography variant='body2'>
-                                desde { 'Caracas!!!!!!' }
+                                desde { dataOrigin ? capitalize(dataOrigin.name) : 'Cualquier parte del mundo' }
                             </Typography>
                         </Grid>
                         {

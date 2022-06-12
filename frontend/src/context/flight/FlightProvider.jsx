@@ -8,6 +8,7 @@ const FLIGHT_INITIAL_STATE = {
     isLoadedCities: false,
     isLoadedFlights: false,
     flights: [],
+    search: [],
     cities: [],
 };
 
@@ -78,7 +79,40 @@ export const FlightProvider = ({ children }) => {
             const response = await fetchWithoutToken('flights/find', data, 'POST');
             const { flights } = await response.json();
 
-            updateFlights( flights );
+            dispatch({
+                type: types.flightsSearch,
+                payload: { flights }
+            });
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const findMoreFlights = async ( filterObj ) => {
+
+        const { origin, destiny, budget, duration, scale, travelDay, returnDay, flightType, flightClass } = filterObj;
+
+        try {
+            const data = {
+                origin,
+                destiny,
+                budget,
+                duration,
+                scale,
+                travelDay,
+                returnDay,
+                flightType,
+                flightClass
+            };
+
+            const response = await fetchWithoutToken('flights/find', data, 'POST');
+            const { flights } = await response.json();
+
+            dispatch({
+                type: types.flightsSearch,
+                payload: flights
+            });
 
         } catch (error) {
             console.log(error);
@@ -91,6 +125,7 @@ export const FlightProvider = ({ children }) => {
 
             //methods
             findFlights,
+            findMoreFlights,
         }}>
             { children }
         </FlightContext.Provider>
