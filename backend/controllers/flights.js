@@ -18,14 +18,14 @@ const getFlights = async ( req, res = response ) => {
 };
 
 const findFlights = async (req, res = response) => {
-    const { origin = '', destiny = '', travelDay = '', returnDay = '', scales = '', duration = '', budget = '' } = req.body;
+    const { origin = '', destiny = '', travelDay = '', scales = '', duration = '', budget = '' } = req.body;
 
     const filter = {
         timeOfFlight: { $lte: duration * 60 },
         price : { $lte: budget },
         origin,
         destiny,
-        exitDate: { $gte: dayjs( travelDay ).subtract('4', 'hours').toISOString() },
+        exitDate: { $gte: dayjs( travelDay ).subtract('4', 'hours').toISOString(), $lte: dayjs( travelDay ).add(1, 'day').subtract('4', 'hours').toISOString() },
         scales: { $lte: scales }
     };
 
@@ -39,7 +39,7 @@ const findFlights = async (req, res = response) => {
         delete filter.duration;
 
     try {
-        const flights = await Flight.find( filter ).populate('origin destiny').lean();
+        const flights = await Flight.find( filter ).populate('origin destiny').sort({ price: 1 }).lean();
 
         return res.status(200).json({ flights });
 
