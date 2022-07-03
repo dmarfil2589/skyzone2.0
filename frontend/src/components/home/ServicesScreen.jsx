@@ -46,7 +46,7 @@ export const ServicesScreen = () => {
                 <Grid container my={2}>
                     <Grid item xs={12}>
                         <Typography variant='h6'>
-                            Servicios que encontraras mientras viajas { dataDestiny ? `${ capitalize( dataDestiny.name ) }` : 'al destino que prefieras' }
+                            Lugares que encontraras mientras viajas { dataDestiny ? `${ capitalize( dataDestiny.name ) }` : 'al destino que prefieras' }
                         </Typography>
                     </Grid>
                 </Grid>

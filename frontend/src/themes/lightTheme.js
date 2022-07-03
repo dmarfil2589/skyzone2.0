@@ -3,9 +3,16 @@ import { createTheme } from "@mui/material/styles";
 export const lightTheme = createTheme({
     palette: {
         kayak: {
-            light: '#ff690f',
-            main: '#ff690f',
-            dark: '#ff690f',
+            light: '#2e86c1',
+            main: '#2e86c1',
+            dark: '#2e86c1',
+            contrastText: '#fff',
+        },
+
+        whatsapp: {
+            light: '#229954',
+            main: '#229954',
+            dark: '#229954',
             contrastText: '#fff',
         },
     },

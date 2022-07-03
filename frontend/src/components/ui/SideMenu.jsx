@@ -29,18 +29,18 @@ export const SideMenu = () => {
                         { capitalize(APPNAME) } Menu
                     </ListSubheader>
                     <Divider />
-
-                    {/* <ListItem
+                    <ListItem
                         button
+                        component={ RouterLink }
+                        to="/"
                         onClick={ () => toogleSideMenu() }
                     >
                         <ListItemIcon>
-                            <AccountCircleOutlinedIcon />
+                            <PublicOutlinedIcon  />
                         </ListItemIcon>
 
-                        <ListItemText primary='Ingresar' />
-                    </ListItem> */}
-
+                        <ListItemText primary='Inicio' />
+                    </ListItem>
                     <ListItem
                         button
                         component={ RouterLink }
@@ -53,33 +53,6 @@ export const SideMenu = () => {
 
                         <ListItemText primary='Vuelos' />       
                     </ListItem>
-
-                    <ListItem
-                        button
-                        component={ RouterLink }
-                        to="/explore"
-                        onClick={ () => toogleSideMenu() }
-                    >
-                        <ListItemIcon>
-                            <PublicOutlinedIcon  />
-                        </ListItemIcon>
-
-                        <ListItemText primary='Explorar' />
-                    </ListItem>
-
-                    <ListItem
-                        button
-                        component={ RouterLink }
-                        to="/business"
-                        onClick={ () => toogleSideMenu() }
-                    >
-                        <ListItemIcon>
-                            <BusinessOutlinedIcon  />
-                        </ListItemIcon>
-
-                        <ListItemText primary='Negocios' />       
-                    </ListItem>
-
                     <ListItem
                         button
                         component={ RouterLink }
@@ -90,7 +63,7 @@ export const SideMenu = () => {
                             <RoomServiceOutlinedIcon  />
                         </ListItemIcon>
 
-                        <ListItemText primary='Servicios' />       
+                        <ListItemText primary='Hospedaje' />       
                     </ListItem>
                 </List>
             </Box>

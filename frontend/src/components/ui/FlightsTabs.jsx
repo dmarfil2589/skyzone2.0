@@ -1,10 +1,12 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useContext } from 'react';
+import { FilterContext } from '../../context';
 import propTypes from 'prop-types';
 import { Box, Grid, Tab, Tabs, Typography } from '@mui/material';
 import { FlightTabPanelCard } from '../flight';
 import { formatWithoutDecimals } from '../../helpers';
 
 export const FlightsTabs = ({ flights }) => {
+    const { travelers} = useContext(FilterContext);
 
     const [ tabValue, setTabValue ] = useState(0);
 
@@ -28,13 +30,13 @@ export const FlightsTabs = ({ flights }) => {
                         label={(
                             <Box>
                                 <Typography>
-                                    <b>Precio mas bajo</b>
+                                    <b>Precio más bajo</b>
                                 </Typography>
 
                                 {
                                     sortedLessPrice.length ? (
                                         <Typography>
-                                            { formatWithoutDecimals( sortedLessPrice[0].price ) }
+                                            { formatWithoutDecimals( sortedLessPrice[0].price * travelers) }
                                         </Typography>
                                     ) : (<></>)
                                 }
@@ -46,13 +48,13 @@ export const FlightsTabs = ({ flights }) => {
                         label={(
                             <Box>
                                 <Typography>
-                                    <b>mas Rapido</b>
+                                    <b>más Rápido</b>
                                 </Typography>
 
                                 {
                                     sortedFasterFlight.length ? (
                                         <Typography>
-                                            { formatWithoutDecimals( sortedFasterFlight[0].price ) }
+                                            { formatWithoutDecimals( sortedFasterFlight[0].price * travelers ) }
                                         </Typography>
                                     ) : ( <></> )
                                 }

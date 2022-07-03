@@ -1,10 +1,10 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { capitalize, Checkbox, CircularProgress, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, List, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { capitalize, Checkbox, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, List, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import dayjs from "dayjs";
 import 'dayjs/locale/es';
 
 import { PrincipalLayout } from '../layouts';
-import { FlightCard, FlightFilterSlider } from '../flight';
+import { FlightFilterSlider } from '../flight';
 import { FilterContext, FlightContext } from '../../context';
 import { FlightsTabs } from '../ui';
 
@@ -217,7 +217,7 @@ export const FlightsScreen = () => {
                         <FormGroup>
                             <FormControlLabel control={ <Checkbox name='noScales' checked={ filter.noScales } onChange={ handleChange } /> } label='Directo' />
                             <FormControlLabel control={ <Checkbox name='oneScales' checked={ filter.oneScales } onChange={ handleChange } /> } label='1 Escala' />
-                            <FormControlLabel control={ <Checkbox name='allScales' checked={ filter.allScales } onChange={ handleChange } /> } label='2 o mas Escalas' />
+                            <FormControlLabel control={ <Checkbox name='allScales' checked={ filter.allScales } onChange={ handleChange } /> } label='2 o más Escalas' />
                         </FormGroup>
                     </Grid>
 
@@ -305,23 +305,6 @@ export const FlightsScreen = () => {
                         flights={ result }
                     />
                 </Grid>
-
-                <Grid item xs={12}>
-                    <Typography variant='h5'>
-                        Encuentra la mejor oferta para ti
-                    </Typography>
-                </Grid>
-
-                {
-                    isLoadedCities ? cities.map( city => (
-                        <FlightCard city={ city.name } key={ city._id } />
-                    )) : 
-                    (
-                        <Grid container item xs={ 12 } justifyContent='center'>
-                            <CircularProgress size={60} />
-                        </Grid>
-                    )
-                }
                 
             </Grid>
         </PrincipalLayout>

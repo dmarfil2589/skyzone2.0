@@ -1,11 +1,20 @@
 import propTypes from 'prop-types';
-
+import { useContext} from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardMedia, Typography, capitalize, Grid, CardActionArea } from "@mui/material";
-
+import { FilterContext} from '../../context';
 export const CityCard = ({ city }) => {
+    const {updateDestiny} = useContext( FilterContext );
+    const navigation = useNavigate();
+
+    const setCity = () => {    
+        updateDestiny([city._id]);
+        navigation(`/flights`);
+    };
 
     return (
-        <Grid item xs={6} sm={4} md={3}>
+        ! ["caracas", "madrid", "roma", "rio de janeiro", "buenos aires", "cordoba"].includes(city.name) &&
+        <Grid item xs={6} sm={4} md={3} onClick={ () => setCity([city._id])}>
             <Card raised>
                 <CardActionArea>
                     <CardMedia
@@ -18,15 +27,6 @@ export const CityCard = ({ city }) => {
                         <Typography variant='body1'>
                             { capitalize( city.name ) }
                         </Typography>
-
-                        {/* {
-                            city.description && (
-                                <Typography variant='body2'>
-                                    { capitalize( city.description ) }
-                                </Typography>
-                            )
-                        } */}
-                        
                     </CardContent>
                 </CardActionArea>
             </Card>

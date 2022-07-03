@@ -52,7 +52,7 @@ export const FlightsFilter = () => {
                 searchFilter();
                 break;
 
-            case '/bussiness':
+            case '/business':
                 searchBusiness({ destiny });
                 break;
 

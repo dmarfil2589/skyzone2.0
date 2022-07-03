@@ -5,28 +5,16 @@ export const ServiceCardInfo = ({ location, business, service }) => {
     return (
         <Grid item xs={12} sm={4} md={3}>
             <Card>
-                <CardHeader 
-                    title={ capitalize( business ) }
-                    subheader={ `${capitalize( location.city )} - ${capitalize( location.country )}` }
-                />
-
                 <CardMedia
                     component='img'
                     alt='image business'
                     height='200'
                     image={ service.image }
                 />
-
-                <CardContent>
-                    <Typography gutterBottom variant='h6' component='div'>
-                        { capitalize(service.name) }
-                    </Typography>
-
-                    <Typography align='justify' noWrap variant='body2' color='text.secondary'>
-                        { service.description }
-                    </Typography>
-                </CardContent>
-
+                <CardHeader
+                    title={ capitalize( service.name ) }
+                    subheader={ `${capitalize( location.city )} - ${capitalize( location.country )}` }
+                />
                 <CardActions>
                     <Button size='small'>
                         Ver mas

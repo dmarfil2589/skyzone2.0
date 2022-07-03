@@ -1,19 +1,17 @@
 import { useContext, useEffect, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
-import { Grid, Typography, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Divider, Box, Slider, CircularProgress, capitalize } from '@mui/material';
+import { Grid, Typography, CircularProgress, Button, CardActions, capitalize, ImageListItem, Card, CardMedia} from '@mui/material';
 
-import { PrincipalLayout } from '../layouts';
+import { SideMenu, Navbar} from '../ui';
 import { CityCard } from './CityCard'
-import { formatWithoutDecimals } from '../../helpers';
 import { FilterContext, FlightContext } from '../../context';
-import { scales } from '../../contants';
 
 export const ExploreScreen = () => {
 
     const { isLoadedCities, cities } = useContext( FlightContext );
-    const { duration, budget, scale, updateDuration, updateBudget, updateScale, origin } = useContext( FilterContext );
-
-    const [ dataOrigin, setDataOrigin ] = useState(null);
+    const [dataOrigin, setDataOrigin ] = useState(null);
+    const {updateDestiny} = useContext( FilterContext );
 
     useEffect(() => {
 
@@ -27,90 +25,25 @@ export const ExploreScreen = () => {
 
     return (
         <>  
-            <PrincipalLayout>
+            <nav>
+                <Navbar />
+            </nav>  
+            <SideMenu />
+            
+            <main style={{ margin: '80px auto', maxWidth: '1440px', padding: '0px 30px' }}>
+                
                 <Grid container>
-                    <Grid item container md={3} sx={{ my: 3 }}>
-                        <Grid item xs={12} sx={{ mr: { xs: 'none', sm: 4 } }}>
-                            <FormControl>
-                                <FormLabel> <b style={{ color: 'black' }}>Escalas</b> </FormLabel>
-                            </FormControl>
-                            
-                            <RadioGroup
-                                aria-labelledby="demo-controlled-radio-buttons-group"
-                                name="controlled-radio-buttons-group"
-                                value={ scale }
-                                onChange={ (e) => updateScale( e.target.value ) }
-                            >
-                                {
-                                    scales.map( type => (
-                                        <FormControlLabel
-                                            key={ type.name }
-                                            value={ type.value }
-                                            control={ <Radio /> }
-                                            label={ type.name }
-                                        />
-                                    ))
-                                }
-                            </RadioGroup>
-
-                            <Divider sx={{ my: 2 }} />
-
-                            <Box display='flex'>
-                                <Typography gutterBottom variant='body1' sx={{ flexGrow: 1 }}>
-                                    <b>Presupuesto</b>
-                                </Typography>
-
-                                <Typography gutterBottom variant='body1'>
-                                    { budget === 2000 ? `${ formatWithoutDecimals(budget) }+`: formatWithoutDecimals(budget) }
-                                </Typography>
-                            </Box>
-
-                            <Slider
-                                min={100}
-                                step={100}
-                                max={2000}
-                                value={ budget }
-                                onChange={ (e) => updateBudget( e.target.value ) }
-                                valueLabelDisplay="auto"
-                            />
-
-                            <Divider sx={{ my: 2 }} />
-                            
-                            <Box display='flex'>
-                                <Typography gutterBottom variant='body1' sx={{ flexGrow: 1 }}>
-                                    <b>Duracion</b>
-                                </Typography>
-
-                                <Typography gutterBottom variant='body1'>
-                                    { duration === 12 ? `${ duration }+ horas`: `${ duration } ${ duration > 1 ? 'horas' : 'hora' }` }
-                                </Typography>
-                            </Box>
-
-                            <Slider
-                                min={1}
-                                step={1}
-                                max={12}
-                                value={ duration }
-                                onChange={ (e) => updateDuration( e.target.value ) }
-                                valueLabelDisplay="auto"
-                            />
-                            
-                        </Grid>
+                    <Grid item xs={12} sm={12} md={12}>
+                        <Typography align='center' variant='h3' marginTop={4} color='text.secondary'>
+                                Encuentra cientos de vuelos en un solo lugar
+                        </Typography>
                     </Grid>
-
-                    <Grid md={9} container item spacing={2} sx={{ my: 1 }}>
-                        <Grid item xs={12}>
-                            <Typography variant='h6'>
-                                Explora Destinos
-                            </Typography>
-
-                            <Typography variant='body2'>
-                                desde { dataOrigin ? capitalize(dataOrigin.name) : 'Cualquier parte del mundo' }
-                            </Typography>
-                        </Grid>
+                </Grid>
+                <Grid container>
+                    <Grid md={12} container item spacing={2} sx={{ my: 1 }}>
                         {
                             isLoadedCities ? cities.map( city => (
-                                <CityCard key={ city._id } city={ city } />
+                                <CityCard key={ city._id } city={ city }/>
                             )) : 
                             (
                                 <Grid container item xs={ 12 } justifyContent='center'>
@@ -120,7 +53,68 @@ export const ExploreScreen = () => {
                         }
                     </Grid>
                 </Grid>
-            </PrincipalLayout>
+   
+                <Grid container marginTop={20}>
+                    <Grid md={6} item spacing={2} sx={{ my: 1 }}>
+                        {
+                            isLoadedCities ? (
+                            <CardMedia
+                                component='img'
+                                alt='image'
+                                height='400'
+                                image="https://veigler.com/wp-content/uploads/2019/07/alojamientos.jpg"
+                            />
+                            ): ""
+                        }
+                    </Grid>
+                    <Grid md={6} item spacing={2} sx={{ my: 1 }} textAlign='center'>
+                        <Typography align='center' variant='h3' color='text.secondary'>
+                            ¿Necesitas hospedaje?
+                        </Typography>
+                        <Button
+                            to="/services"
+                            float='center'
+                            sx={{ mt: 2 }}
+                            variant='contained'
+                            color='kayak'
+                            component={ RouterLink }
+                            target='_blank'
+                        >
+                            Encuentra el lugar de tus sueños
+                        </Button>
+                    </Grid>
+                </Grid>
+
+                <Grid container marginTop={20}>
+                    <Grid md={6} item spacing={2} sx={{ my: 1 }} textAlign='center'>
+                        <Typography align='center' variant='h3' color='text.secondary'>
+                            Asesoría en línea
+                        </Typography>
+                        <Button
+                            float='center'
+                            sx={{ mt: 2 }}
+                            variant='contained'
+                            color='whatsapp'
+                            target='_blank'
+                            href='https://api.whatsapp.com/send/?phone=584129855059&text&app_absent=0'
+                        >
+                            Contáctanos a través de Whatsapp
+                        </Button>
+                    </Grid>
+                    <Grid md={6} item spacing={2} sx={{ my: 1 }}>
+                        {
+                            isLoadedCities ? (
+                            <CardMedia
+                                component='img'
+                                alt='image'
+                                height='400'
+                                image="https://www.viancotetransporta.com/wp-content/uploads/2020/11/web-asesoria-online_Mesa-de-trabajo-1.png"
+                            />
+                            ): ""
+                        }
+                    </Grid>
+                </Grid>
+            </main>
         </>
     )
 }

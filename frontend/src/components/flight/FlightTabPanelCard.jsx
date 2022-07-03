@@ -1,11 +1,13 @@
 import propTypes from 'prop-types';
-
+import { useContext} from 'react';
+import { FilterContext } from '../../context';
 import { Box, Button, Chip, Divider, Grid, IconButton, Paper, Typography } from '@mui/material';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import { TabPanelDetails } from './TabPanelDetails';
 import { formatCurrency, formatWeight } from '../../helpers';
 
 export const FlightTabPanelCard = ({ tabValue, flight, index }) => {
+    const { travelers} = useContext(FilterContext);
 
     return (
         <Paper sx={{ p: 3 }} elevation={3}>
@@ -15,7 +17,7 @@ export const FlightTabPanelCard = ({ tabValue, flight, index }) => {
                     <Grid item container xs={12}>
                         {
                             index === 0 && (
-                                <Chip label={ tabValue === 0 ? 'El Mas Barato' : 'Mas Rapido' }  color='primary' />
+                                <Chip label={ tabValue === 0 ? 'El Más Barato' : 'Más Rápido' }  color='primary' />
                             )
                         }
 
@@ -74,7 +76,7 @@ export const FlightTabPanelCard = ({ tabValue, flight, index }) => {
                     </Typography>
                             
                     <Typography variant='h5'>
-                        <b> { formatCurrency( flight.price ) } </b>
+                        <b> { formatCurrency( flight.price * travelers ) } </b>
                     </Typography>
 
                     <Button
@@ -85,7 +87,7 @@ export const FlightTabPanelCard = ({ tabValue, flight, index }) => {
                         target='_blank'
                         href={ flight.airline.pageweb }
                     >
-                        Ver Oferta
+                        Ir a la página
                     </Button>
                 </Grid>
             </Grid>            
